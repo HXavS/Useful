@@ -1,6 +1,6 @@
 USE DATABASE_NAME
 
-DECLARE @SearchStr nvarchar(100) = '12.345.678.910'
+DECLARE @SearchStr nvarchar(100) = 'Search Term'
 
 DECLARE @Results TABLE (ColumnName nvarchar(370), ColumnValue nvarchar(3630))
 
