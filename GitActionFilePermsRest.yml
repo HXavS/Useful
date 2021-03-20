@@ -1,0 +1,43 @@
+name: File Permission Reset
+
+on:
+  workflow_dispatch:
+
+jobs:
+  # test:
+  #   ...
+  deploy:
+    name: "Staging File Perms Reset"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.STAGING_SSH_USER }}
+          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+
+      - name: Fix File Ownership
+        run: ssh staging 'sudo find /var/www/ -exec chown www-data:www-data {} \;'
+        
+      - name: Fix Directory Perms
+        run: ssh staging 'sudo find /var/www/ -type d -exec chmod 755 {} \;'
+       
+       - name: Fix File Perms
+        run: ssh staging 'sudo find /var/www/ -type f -exec chmod 644 {} \;'
+        
+       - name: Secure wp-config
+        run: ssh staging 'sudo find /var/www/ -name "wp-config.php" -exec chmod 600{} \;'
+        
+       - name: Secure htaccess
+        run: ssh staging 'sudo find /var/www/ -name ".htaccess" -exec chmod 600 {} \;'
