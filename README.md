@@ -3,4 +3,4 @@
 Collections of Useful Commands & Scripts
 
 
-[Collection of useful Programs](/HXavS/Useful/wiki)
+[Collection of Useful Programs](/HXavS/Useful/wiki)
