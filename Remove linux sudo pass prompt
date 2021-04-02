@@ -1,0 +1,11 @@
+#!bin/bash
+
+sudo su
+
+#replace with param
+echo "<user> ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers
+
+sudo -k 
+
+sudo ls
+
